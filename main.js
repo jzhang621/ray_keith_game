@@ -20,7 +20,6 @@ $( document ).ready(function() {
 		"Kyle Lowry",
 		"Russell Westbrook",
 		"Jamal Murray",
-		"Marc Gasol",
 		"JJ Redick"];
 	var jimmy_players = [
 		"Kevin Durant",
