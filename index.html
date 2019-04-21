@@ -53,7 +53,7 @@
 
             td, th {
                 border: 1px solid #dddddd;
-                text-align: left;
+                text-align: center;
                 padding: 8px;
             }
 
@@ -70,6 +70,11 @@
                 text-decoration: none;
                 display: inline-block;
                 font-size: 20px;
+            }
+
+            tr.sub > th {
+                font-size: 1.2rem;
+                text-align: center;
             }
 
             .ray{background-color: #e5efff;} 
@@ -110,51 +115,68 @@
             <div class="table">
                 <table id="ray_total" class="sortable">
                   <tr>
-                    <th width = "20%">Name</th>
-                    <th class="sorttable_numeric">Games</th>
-                    <th class="sorttable_numeric">Round 1</th>
-                    <th class="sorttable_numeric">Round 2</th>
-                    <th class="sorttable_numeric">Conference Finals</th>
-                    <th class="sorttable_numeric">Finals</th>
-                    <th class="sorttable_numeric">Total</th>
-                    <th class="sorttable_numeric">Average</th>
+                    <th rowspan="2" width = "20%">Name</th>
+                    <th class="sorttable_numeric" colspan="3">Round 1</th>
+                    <th class="sorttable_numeric" colspan="3">Round 2</th>
+                    <th class="sorttable_numeric" colspan="3">CF</th>
+                    <th class="sorttable_numeric" colspan="3">Finals</th>
+                    <th class="sorttable_numeric" rowspan="2">G</th>
+                    <th class="sorttable_numeric" rowspan="2">Total</th>
+                    <th class="sorttable_numeric" rowspan="2">Avg</th>
+                  </tr>
+                  <tr class="sub">
+                    <th></th>
+                    <th>PTS</th>
+                    <th>REB</th>
+                    <th>ASTS</th>
+                    <th>PTS</th>
+                    <th>REB</th>
+                    <th>ASTS</th>
+                    <th>PTS</th>
+                    <th>REB</th>
+                    <th>ASTS</th>
+                    <th>PTS</th>
+                    <th>REB</th>
+                    <th>ASTS</th>
                   </tr>
                   <tr id="rt"></tr>
                 </table>
             </div>
-            <div class="table">
-                <table id="ray_total_last">
-                  <tr id="rtl">
-                      <td width = 20%>Ray's Team</td>
-                  </tr>
-                </table>
-            </div>
+           
             <div class="title">
-                <h3 id = 'jimmy'> Jimmy </h3>
+                <h3 id = 'jimmy'> Keith </h3>
             </div>
             <div class="table">
                 <table id = "jimmy_total" class="sortable">
                     <tr>
                         <th width = "20%">Name</th>
-                        <th class="sorttable_numeric">Games</th>
-                        <!-- <th class="sorttable_numeric" colspan="3">Round 1</th> -->
-                        <th class="sorttable_numeric">Round 1</th>
-                        <th class="sorttable_numeric">Round 2</th>
-                        <th class="sorttable_numeric">Conference Finals</th>
-                        <th class="sorttable_numeric">Finals</th>
+                        <th class="sorttable_numeric" colspan="3">Round 1</th>
+                        <th class="sorttable_numeric" colspan="3">Round 2</th>
+                        <th class="sorttable_numeric" colspan="3">CF</th>
+                        <th class="sorttable_numeric" colspan="3">Finals</th>
+                        <th class="sorttable_numeric" rowspan="2">G</th>
                         <th class="sorttable_numeric">Total</th>
-                        <th class="sorttable_numeric">Average</th>
+                        <th class="sorttable_numeric">Avg</th>
+                    </tr>
+                    <tr class="sub">
+                        <th></th>
+                        <th>PTS</th>
+                        <th>REB</th>
+                        <th>ASTS</th>
+                        <th>PTS</th>
+                        <th>REB</th>
+                        <th>ASTS</th>
+                        <th>PTS</th>
+                        <th>REB</th>
+                        <th>ASTS</th>
+                        <th>PTS</th>
+                        <th>REB</th>
+                        <th>ASTS</th>
                     </tr>
                     <tr id="jt"></tr>
                 </table>
             </div>
-            <div class = "table">
-                <table id = "jimmy_total_last">
-                  <tr id="jtl">
-                      <td width = 20%>Jimmy's Team</td>
-                  </tr>
-                </table>
-            </div>
+           
         </div>     
     </body>
 </html>

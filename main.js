@@ -9,38 +9,47 @@ function roundFromGameId(gameId) {
 $( document ).ready(function() {
 	var url = "https://stats.nba.com/stats/leaguegamelog?Counter=1000000&DateFrom=&DateTo=&Direction=ASC&LeagueID=00&PlayerOrTeam=P&Season=2018-19&SeasonType=Playoffs&Sorter=DATE&callback=?"
 
-	var ray_players = [
-		"Stephen Curry",
-		"Giannis Antetokounmpo",
-		"James Harden",
-		"Paul George",
-		"Kyrie Irving",
-		"Joel Embiid",
-		"Kyle Lowry",
-		"Russell Westbrook",
-		"Jamal Murray",
-		"JJ Redick"];
 	var jimmy_players = [
-		"Kevin Durant",
-		"Kawhi Leonard",
+		
+		"Giannis Antetokounmpo",
+		"Russell Westbrook",
+		"Paul George",
+		"James Harden",
 		"Klay Thompson",
-		"Pascal Siakam",
-		"Khris Middleton",
-		"DeMarcus Cousins",
+		"Kyrie Irving",
+		"Khris Middleton",	
+		"Ben Simmons",
+		"Draymond Green",
+		"Al Horford"
+	];
+	var ray_players = [
+		"Kevin Durant",
+		"Stephen Curry",
+		"Kawhi Leonard",
 		"Nikola Jokic",
+		"DeMarcus Cousins",
+		"Joel Embiid",
 		"Eric Bledsoe",
+		"Pascal Siakam",
 		"Jimmy Butler",
-		"Serge Ibaka"
+		"Kyle Lowry",
 	];
 	class Player {
 		constructor(name) {
 			this._name = name;
 			this._totalgames = 0;
-			this._round1points = 0;
-			this._round2points = 0;
-			this._round3points = 0;
-			this._round4points = 0;
-			this._totalpoints = 0;
+
+			// maps rounds to data (pts, rebs, assists)
+			this._data = {};
+			for (let i = 1; i < 5; i++)  {
+				this._data[i] = {
+					points: 0,
+					assists: 0,
+					rebounds: 0,
+					_totalStats: 0,
+				}
+			}
+			this._totalStats = 0;
 			this._average = 0;
 		}
 
@@ -49,26 +58,17 @@ $( document ).ready(function() {
 			var points = boxline[28];
 			var reb = boxline[22];
 			var asts = boxline[23];
+
+			var totalStats = points + reb + asts;	
 			this._totalgames += 1;
-			this._totalpoints += points;
+			this._totalStats += totalStats;
 
 			var round = roundFromGameId(boxline[6]);
-			switch(round) {
-				case 1:
-					this._round1points += points;
-					break;
-				case 2:
-					this._round2points += points;
-					break;
-				case 3:
-					this._round3points += points;
-					break;
-				case 4:
-					this._round4points += points;
-					break;
-			}
-
-			this._average = Number(this._totalpoints/this._totalgames).toFixed(1);
+			this._data[round].points += points;
+			this._data[round].assists += asts;
+			this._data[round].rebounds += reb;
+			this._data[round]._totalStats += totalStats;
+			this._average = Number(this._totalStats/this._totalgames).toFixed(1);
 		}
 	}
 
@@ -86,7 +86,7 @@ $( document ).ready(function() {
 	        ray_total = new Array(8).fill(0);
 	        ray_total[0] = "Ray Totals"
 	        jimmy_total = new Array(8).fill(0);
-	        jimmy_total[0] = "Jimmy Totals"
+	        jimmy_total[0] = "Keith Totals"
 
 	        for (var i = 0; i < rowSet.length; i++) { //input boxscores into players
 						if (ray_players.indexOf(rowSet[i][2]) > -1) {
@@ -99,64 +99,63 @@ $( document ).ready(function() {
 			}
 				
 			for (var i = 0; i < ray_players.length; i++) {
+
 				ray_name = ray_players[i];
 				jimmy_name = jimmy_players[i];
-
+				
+				// fill out totals headers
 				ray_total[1] += ray_players_class[ray_name]._totalgames;
 				jimmy_total[1] += jimmy_players_class[jimmy_name]._totalgames;
 
-				ray_total[2] += ray_players_class[ray_name]._round1points;
-				jimmy_total[2] += jimmy_players_class[jimmy_name]._round1points;
+				ray_total[6] += ray_players_class[ray_name]._totalStats;
+                jimmy_total[6] += jimmy_players_class[jimmy_name]._totalStats;
 
-				ray_total[3] += ray_players_class[ray_name]._round2points;
-				jimmy_total[3] += jimmy_players_class[jimmy_name]._round2points;
-
-				ray_total[4] += ray_players_class[ray_name]._round3points;
-				jimmy_total[4] += jimmy_players_class[jimmy_name]._round3points;
-
-				ray_total[5] += ray_players_class[ray_name]._round4points;
-				jimmy_total[5] += jimmy_players_class[jimmy_name]._round4points;
-
-				ray_total[6] += ray_players_class[ray_name]._totalpoints;
-				jimmy_total[6] += jimmy_players_class[jimmy_name]._totalpoints;
-
-				row = document.getElementById("ray_total").insertRow(1); //rodger
-				row.insertCell(0).innerHTML = ray_players_class[ray_name]._name;
-				row.insertCell(1).innerHTML = ray_players_class[ray_name]._totalgames;
-				row.insertCell(2).innerHTML = ray_players_class[ray_name]._round1points;
-				row.insertCell(3).innerHTML = ray_players_class[ray_name]._round2points;
-				row.insertCell(4).innerHTML = ray_players_class[ray_name]._round3points;
-				row.insertCell(5).innerHTML = ray_players_class[ray_name]._round4points;
-				row.insertCell(6).innerHTML = ray_players_class[ray_name]._totalpoints;
-				row.insertCell(7).innerHTML = ray_players_class[ray_name]._average;
-
-				row = document.getElementById("jimmy_total").insertRow(1); //jimmy
-				row.insertCell(0).innerHTML = jimmy_players_class[jimmy_name]._name;
-				row.insertCell(1).innerHTML = jimmy_players_class[jimmy_name]._totalgames;
-				row.insertCell(2).innerHTML = jimmy_players_class[jimmy_name]._round1points;
-				row.insertCell(3).innerHTML = jimmy_players_class[jimmy_name]._round2points;
-				row.insertCell(4).innerHTML = jimmy_players_class[jimmy_name]._round3points;
-				row.insertCell(5).innerHTML = jimmy_players_class[jimmy_name]._round4points;
-				row.insertCell(6).innerHTML = jimmy_players_class[jimmy_name]._totalpoints;
-				row.insertCell(7).innerHTML = jimmy_players_class[jimmy_name]._average;
-			}
-
-			ray_total[7] = Number(ray_total[6]/ray_total[1]).toFixed(1);
-			jimmy_total[7] = Number(jimmy_total[6]/jimmy_total[1]).toFixed(1);
-
-			for (var i = 0; i < ray_total.length; i++) {
-				if (i != 0) {
-					jrow = document.getElementById("jtl");
-					rrow = document.getElementById("rtl");
-					jrow.insertCell(i).innerHTML = jimmy_total[i];
-					rrow.insertCell(i).innerHTML = ray_total[i];
+				// rounds 1 - 4
+				for (let j = 2; j < 6; j++) {
+					ray_total[j] += ray_players_class[ray_name]._data[j - 1]._totalStats;
+					jimmy_total[j] += jimmy_players_class[jimmy_name]._data[j - 1]._totalStats;
 				}
 
+				ray_total[7] = Number(ray_total[6]/ray_total[1]).toFixed(1);
+				jimmy_total[7] = Number(jimmy_total[6]/jimmy_total[1]).toFixed(1);
+
+				// fill out data for each player
+				rayRow = document.getElementById("ray_total").insertRow(2);
+				rayRow.insertCell(0).innerHTML = ray_players_class[ray_name]._name;
+
+				jimmyRow = document.getElementById("jimmy_total").insertRow(2);
+				jimmyRow.insertCell(0).innerHTML = jimmy_players_class[jimmy_name]._name;
+
+				let round = 1;
+				for (let r = 1; r < 13; r += 3) {
+					var rayRoundData = ray_players_class[ray_name]._data[round];
+					var jimmyRoundData = jimmy_players_class[jimmy_name]._data[round];
+
+					rayRow.insertCell(r).innerHTML = rayRoundData.points;
+					jimmyRow.insertCell(r).innerHTML = jimmyRoundData.points;
+
+					rayRow.insertCell(r + 1).innerHTML = rayRoundData.rebounds;
+					jimmyRow.insertCell(r + 1).innerHTML = rayRoundData.rebounds;
+
+					rayRow.insertCell(r + 2).innerHTML = rayRoundData.assists;
+					jimmyRow.insertCell(r + 2).innerHTML = rayRoundData.assists;
+					round += 1;
+				}
+
+				rayRow.insertCell(13).innerHTML = ray_players_class[ray_name]._totalgames;
+				jimmyRow.insertCell(13).innerHTML = jimmy_players_class[jimmy_name]._totalgames;
+
+				rayRow.insertCell(14).innerHTML = ray_players_class[ray_name]._totalStats;
+				rayRow.insertCell(15).innerHTML = ray_players_class[ray_name]._average;
+				jimmyRow.insertCell(14).innerHTML = jimmy_players_class[jimmy_name]._totalStats;
+				jimmyRow.insertCell(15).innerHTML = jimmy_players_class[jimmy_name]._average;
+			}
+
+			for (var i = 0; i < ray_total.length; i++) {
 				jcell = document.getElementById("jtt").insertCell(i);
 				rcell = document.getElementById("rtt").insertCell(i);
 				jcell.innerHTML = jimmy_total[i];
 				rcell.innerHTML = ray_total[i];
-
 			}
 	    });
 });
