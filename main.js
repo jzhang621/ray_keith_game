@@ -8,7 +8,6 @@ function roundFromGameId(gameId) {
 
 $( document ).ready(function() {
 	var url = "https://stats.nba.com/stats/leaguegamelog?Counter=1000000&DateFrom=&DateTo=&Direction=ASC&LeagueID=00&PlayerOrTeam=P&Season=2018-19&SeasonType=Playoffs&Sorter=DATE&callback=?"
-	var url2 = "https://stats.nba.com/stats/leaguedashplayerstats?College=&Conference=&Country=&DateFrom=&DateTo=&Division=&DraftPick=&DraftYear=&GameScope=&GameSegment=&Height=&LastNGames=0&LeagueID=00&Location=&MeasureType=Base&Month=0&OpponentTeamID=0&Outcome=&PORound=0&PaceAdjust=N&PerMode=Totals&Period=0&PlayerExperience=&PlayerPosition=&PlusMinus=N&Rank=N&Season=2018-19&SeasonSegment=&SeasonType=Playoffs&ShotClockRange=&StarterBench=&TeamID=0&VsConference=&VsDivision=&Weight=&callback=?"
 
 	var ray_players = [
 		"Stephen Curry",
@@ -46,7 +45,10 @@ $( document ).ready(function() {
 		}
 
 		inputBoxScore(boxline) {
+			console.log("boxline: ", boxline);
 			var points = boxline[28];
+			var reb = boxline[22];
+			var asts = boxline[23];
 			this._totalgames += 1;
 			this._totalpoints += points;
 
@@ -157,26 +159,6 @@ $( document ).ready(function() {
 
 			}
 	    });
-
-	$.getJSON(url2,  // url2
-	    function (data) {  // success callback
-	    	rowSet = data.resultSets[0].rowSet;
-	    	rowSet.sort(function(a,b) {return b[29] - a[29]})
-	    	for (var i = 0; i < 20; i++) {
-	    		row = document.getElementById("topplayers").insertRow(i+1);
-	    		if (ray_players.indexOf(rowSet[i][1]) > -1) {
-	    			row.className = "ray";
-	    		}
-	    		if (jimmy_players.indexOf(rowSet[i][1]) > -1) {
-	    			row.className = "jimmy";
-	    		}
-	    		row.insertCell(0).innerHTML = rowSet[i][1];
-	    		row.insertCell(1).innerHTML = rowSet[i][5];
-	    		row.insertCell(2).innerHTML = rowSet[i][29];
-	    		row.insertCell(3).innerHTML = Number(rowSet[i][29]/rowSet[i][5]).toFixed(1);
-	    	}
-	    }
-	);
 });
 
 function scrolly(name) {
