@@ -36,6 +36,7 @@ $( document ).ready(function() {
 	];
 	class Player {
 		constructor(name) {
+
 			this._name = name;
 			this._totalgames = 0;
 
@@ -54,7 +55,6 @@ $( document ).ready(function() {
 		}
 
 		inputBoxScore(boxline) {
-			console.log("boxline: ", boxline);
 			var points = boxline[28];
 			var reb = boxline[22];
 			var asts = boxline[23];
@@ -97,11 +97,14 @@ $( document ).ready(function() {
 						jimmy_players_class[rowSet[i][2]].inputBoxScore(rowSet[i]);
 					}
 			}
-				
+			
+			// loop through players
 			for (var i = 0; i < ray_players.length; i++) {
 
 				ray_name = ray_players[i];
 				jimmy_name = jimmy_players[i];
+
+				console.log("jimmy_name: ", jimmy_name)
 				
 				// fill out totals headers
 				ray_total[1] += ray_players_class[ray_name]._totalgames;
@@ -135,10 +138,10 @@ $( document ).ready(function() {
 					jimmyRow.insertCell(r).innerHTML = jimmyRoundData.points;
 
 					rayRow.insertCell(r + 1).innerHTML = rayRoundData.rebounds;
-					jimmyRow.insertCell(r + 1).innerHTML = rayRoundData.rebounds;
+					jimmyRow.insertCell(r + 1).innerHTML = jimmyRoundData.rebounds;
 
 					rayRow.insertCell(r + 2).innerHTML = rayRoundData.assists;
-					jimmyRow.insertCell(r + 2).innerHTML = rayRoundData.assists;
+					jimmyRow.insertCell(r + 2).innerHTML = jimmyRoundData.assists;
 					round += 1;
 				}
 
